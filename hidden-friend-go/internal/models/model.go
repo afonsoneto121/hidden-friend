@@ -1,7 +1,7 @@
-package model
+package models
 
 type User struct {
-	ID       string   `json:"id"`
+	ID       string   `json:"_id" bson:"_id,omitempty"`
 	Name     string   `json:"name"`
 	Username string   `json:"username"`
 	Password string   `json:"password"`
@@ -9,7 +9,7 @@ type User struct {
 }
 
 type Group struct {
-	ID          string              `json:"id"`
+	ID          string              `json:"_id" bson:"_id,omitempty"`
 	Name        string              `json:"name"`
 	Description string              `json:"description"`
 	Admin       User                `json:"admin"`
