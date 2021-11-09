@@ -37,7 +37,7 @@ func main() {
 	{
 		group.GET("/", handler.GetAllGroups)
 		group.GET("/:id", handler.GetGroupByID)
-		group.GET("/:id/users", handler.GetGroupMatches)
+		group.GET("/:id/users", handler.GetGroupUsers)
 		group.GET("/:id/matches", handler.GetAllUsers)
 
 		group.POST("/", handler.CreateNewGroup)

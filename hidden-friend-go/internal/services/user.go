@@ -17,11 +17,16 @@ func CreateUser(user *models.User) {
 
 	coll := client.Database("hidden-friend").Collection("users")
 
-	_, err := coll.InsertOne(context.TODO(), user)
+	res, err := coll.InsertOne(context.TODO(), user)
 
 	if err != nil {
 		log.Fatal("Erro ", err)
 	}
+
+	if oid, ok := res.InsertedID.(primitive.ObjectID); ok {
+		user.ID = oid.Hex()
+	}
+
 }
 
 func GetAllUsers() []models.User {
