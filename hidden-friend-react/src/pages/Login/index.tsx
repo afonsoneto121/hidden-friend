@@ -1,30 +1,36 @@
 import { TextField, Button } from '@material-ui/core'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { addLogin } from '../../redux/login/loginSlice';
 import { User } from '../models/user';
 import { createUser, getUserById } from '../service/user';
 import * as C from "./styles"
 
 export const Login = () => {
-  const navigate = useNavigate();
   let [isLogin, setIsLogin] = useState(true);
   let [user, setUser] = useState<User>();
   
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch()
+
   const toggleFormLogin = () => {
     setIsLogin(!isLogin);
   }
   const handleLogin = async () => {
-    //Create a function for login 
-    //Fake Request for login function
+    
     const id = "6185e6bcf09c2dc61cd3a179";
-    const userResult = await getUserById(id);
-    console.log(userResult.name);
-    navigate("/home")
+    const userResult: User = await getUserById(id);
+    console.log(userResult);
+    dispatch(addLogin(userResult));
+    navigate("/home");
   }
 
   const handleOnClickSave = async () => {
     const result = await createUser(user);
-    // Create a context for the new user and redirect to home page
+    
+    dispatch(addLogin(result));
     navigate("/home")
   }
 
