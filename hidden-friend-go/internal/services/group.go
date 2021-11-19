@@ -10,6 +10,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func CreateNewGroup(group *models.Group) {
@@ -81,8 +82,8 @@ func ToggleGroup(idGroup string, user models.User) error {
 func GetAllGroups() []models.Group {
 	client := config.New()
 	coll := client.Database("hidden-friend").Collection("group")
-
-	cur, err := coll.Find(context.TODO(), bson.D{})
+	opts := options.Find().SetProjection(bson.M{"users.password": 0, "admin.password": 0})
+	cur, err := coll.Find(context.TODO(), bson.D{}, opts)
 
 	if err != nil {
 		fmt.Println(err)
@@ -105,8 +106,8 @@ func GetGroupByID(id string) (models.Group, error) {
 	objectId, _ := primitive.ObjectIDFromHex(id)
 	var group models.Group
 	filter := bson.D{{"_id", objectId}}
-
-	err := coll.FindOne(context.TODO(), filter).Decode(&group)
+	opts := options.FindOne().SetProjection(bson.M{"users.password": 0, "admin.password": 0})
+	err := coll.FindOne(context.TODO(), filter, opts).Decode(&group)
 
 	return group, err
 }
