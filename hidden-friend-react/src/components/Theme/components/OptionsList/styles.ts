@@ -12,3 +12,10 @@ export const Container = styled('div')({
     }
   }
 })
+
+export const NewGroup = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingTop: 10,
+})

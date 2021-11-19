@@ -12,7 +12,6 @@ import { KeyboardArrowRight, MoreVert } from "@mui/icons-material";
 import { User } from "../models/user";
 
 export const Home = () => {
-  const userLogin = useAppSelector((state) => state.login.currente)
 
   const [groups, setGroups] = useState<Group[]>([])
   const [expanded, setExpanded] = useState(false)
@@ -25,7 +24,9 @@ export const Home = () => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  }
   useEffect(() => {
 
     const allGroup = async () => {
@@ -43,6 +44,7 @@ export const Home = () => {
     }
     getCurrentGroup();
   }, [groupCurrent])
+
   const handleExpandClick = (index: number) => {
     setGroupCurrent(groups[index])
     setGroups(groups.map((group, key) => {
@@ -58,7 +60,7 @@ export const Home = () => {
   };
 
   return (
-    <Theme user={userLogin}>
+    <Theme>
       <C.Container>
         <Grid container spacing={0.5}>
           <C.TitlePage> <h1>Página Inicial </h1> </C.TitlePage>
@@ -85,6 +87,7 @@ export const Home = () => {
                         id='basic-menu'
                         anchorEl={anchorEl}
                         open={open}
+                        onClose={handleCloseMenu}
                       >
                         <MenuItem>Entrar</MenuItem>
                         <MenuItem>Detalhes</MenuItem>

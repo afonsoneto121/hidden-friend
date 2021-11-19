@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material'
 import React, { ReactNode } from 'react'
+import { useAppSelector } from '../../app/hooks'
 import { User } from '../../pages/models/user'
 import { Init } from './components/Init'
 import { OptionsList } from './components/OptionsList'
@@ -8,10 +9,12 @@ import * as C from "./styles"
 
 type Props = {
   children: ReactNode,
-  user: User
 }
 
-export const Theme = ({ children, user }: Props) => {
+export const Theme = ({ children}: Props) => {
+  
+  const user = useAppSelector((state) => state.login.currente)
+
   return (
     <C.Container>
       <C.Area>

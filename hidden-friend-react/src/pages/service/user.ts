@@ -25,3 +25,13 @@ export const getUserById = async(id: string) => {
     .then(response => response.json())
     .catch(error => console.log('error', error));
 }
+
+export const getAllUsers = async() => {
+  var requestOptions = {
+    method: 'GET'
+  };
+  
+  return await fetch(`http://localhost:8080/user/`, requestOptions)
+    .then(response => response.json())
+    .catch(error => console.log('error', error));
+}
