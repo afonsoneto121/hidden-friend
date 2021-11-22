@@ -1,7 +1,6 @@
-import { Collapse, IconButtonProps } from "@material-ui/core";
-import { Card, CardActions, CardContent, Grid, IconButton, Paper, Skeleton } from "@mui/material";
+import { Collapse } from "@material-ui/core";
+import {  CardContent,  IconButton } from "@mui/material";
 import { styled } from '@mui/material/styles';
-import { transform } from "typescript";
 
 export const Container = styled('div')({
   display: 'flex',
@@ -9,7 +8,7 @@ export const Container = styled('div')({
   width: '100%',
   height: '100%',
   backgroundColor: '#FDFDFF',
-  overflow: 'hidden',
+
 })
 
 export const TitlePage = styled('div')({
@@ -68,5 +67,7 @@ export const Participants = styled(Collapse)(({
   'h1': {
     fonstSize: 24,
     fontWeight: 'bold',
-  }
+  },
+  top: 0,
+  position: 'sticky', 
 }))

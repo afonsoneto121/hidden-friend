@@ -10,6 +10,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func CreateUser(user *models.User) {
@@ -37,7 +38,8 @@ func GetAllUsers() []models.User {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	cur, err := coll.Find(ctx, bson.D{})
+	opts := options.Find().SetProjection(bson.M{"password": 0})
+	cur, err := coll.Find(ctx, bson.D{}, opts)
 
 	if err != nil {
 		log.Fatal("Erro ", err)
@@ -57,8 +59,20 @@ func GetUserById(id string) (models.User, error) {
 	defer cancel()
 	var user models.User
 	objectId, _ := primitive.ObjectIDFromHex(id)
+	opts := options.FindOne().SetProjection(bson.M{"password": 0})
+	err := coll.FindOne(ctx, bson.M{"_id": objectId}, opts).Decode(&user)
 
-	err := coll.FindOne(ctx, bson.M{"_id": objectId}).Decode(&user)
+	return user, err
+}
+
+func Login(user models.User) (models.User, error) {
+	client := config.New()
+	coll := client.Database("hidden-friend").Collection("users")
+	filter := bson.M{"username": user.Username, "password": user.Password}
+
+	opts := options.FindOne().SetProjection(bson.M{"password": 0})
+
+	err := coll.FindOne(context.TODO(), filter, opts).Decode(&user)
 
 	return user, err
 }

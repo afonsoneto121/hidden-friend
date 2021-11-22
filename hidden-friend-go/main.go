@@ -2,6 +2,9 @@ package main
 
 import (
 	"afonso/hidden-friend/internal/handler"
+	"net/http"
+
+	"afonso/hidden-friend/internal/handler/auth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,12 +23,24 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
+func AuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		err := auth.TokenValid(c.Request)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, err.Error())
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}
 func main() {
 
 	router := gin.Default()
 	router.Use(CORSMiddleware())
 
-	user := router.Group("/user")
+	router.POST("/login", auth.Login)
+	user := router.Group("/user", AuthMiddleware())
 	{
 		user.GET("/", handler.GetAllUsers)
 		user.GET("/:id", handler.GetUserById)
@@ -33,7 +48,7 @@ func main() {
 
 	}
 
-	group := router.Group("/group")
+	group := router.Group("/group", AuthMiddleware())
 	{
 		group.GET("/", handler.GetAllGroups)
 		group.GET("/:id", handler.GetGroupByID)

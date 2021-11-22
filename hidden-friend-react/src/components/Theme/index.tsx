@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material'
 import React, { ReactNode } from 'react'
-import { useAppSelector } from '../../app/hooks'
+import { useCurrentUser } from '../../app/hook'
 import { User } from '../../pages/models/user'
 import { Init } from './components/Init'
 import { OptionsList } from './components/OptionsList'
@@ -11,24 +11,21 @@ type Props = {
   children: ReactNode,
 }
 
-export const Theme = ({ children}: Props) => {
-  
-  const user = useAppSelector((state) => state.login.currente)
+export const Theme = ({ children }: Props) => {
+
+  const user: User = useCurrentUser()
 
   return (
     <C.Container>
       <C.Area>
-        <Grid container spacing={0}>
+        <Grid container spacing={1}>
 
           <Grid item xs={3}>
-            <C.Item>
-              <C.SideBar>
-                <Init />
-                <OptionsList />
-                <Profile user={user}/>
-              </C.SideBar>
-            </C.Item>
-
+            <C.SideBar>
+              <Init />
+              <OptionsList />
+              <Profile user={user} />
+            </C.SideBar>
           </Grid>
           <Grid item xs={9}>
             <C.Item>
