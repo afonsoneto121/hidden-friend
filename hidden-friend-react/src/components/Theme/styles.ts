@@ -2,7 +2,8 @@ import { styled } from "@material-ui/system";
 
 export const Container = styled('div')({  
   backgroundColor: '#fff',
-  minHeight: '100vh'
+  minHeight: '100vh',
+  
 });
 
 export const Area = styled('div')({  
@@ -14,7 +15,6 @@ export const Area = styled('div')({
 export const Item = styled('div')({  
   display: 'flex',
   width: '100%',
-  height: '100%',
 });
 
 export const SideBar = styled('div')({ 
@@ -22,5 +22,8 @@ export const SideBar = styled('div')({
   flexDirection: 'column',
   width: '100%',
   height: '100vh',
-  borderRight: '1px solid #EFF3F4'
+  borderRight: '1px solid #EFF3F4',
+  top: 0,
+  position: 'sticky', 
+  
 })

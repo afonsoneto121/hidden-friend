@@ -1,4 +1,3 @@
-import { useAppSelector } from "../../app/hooks"
 
 import { useEffect, useState } from "react";
 import { Group } from "../models/group";
@@ -6,7 +5,7 @@ import { getAllGroups, gettUserGroup } from "../service/group"
 
 import * as C from "./styles"
 import { Theme } from "../../components/Theme";
-import { Menu,MenuItem, Avatar, Card, CardActions, CardHeader, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemText, Skeleton } from "@mui/material";
+import { Menu, MenuItem, Avatar, Card, CardActions, CardHeader, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemText, Skeleton } from "@mui/material";
 import { Box } from "@material-ui/system";
 import { KeyboardArrowRight, MoreVert } from "@mui/icons-material";
 import { User } from "../models/user";
@@ -17,10 +16,10 @@ export const Home = () => {
   const [expanded, setExpanded] = useState(false)
   const [groupCurrent, setGroupCurrent] = useState<Group>()
   const [usersGroup, setUsersGroup] = useState<User[]>([])
-  
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -67,7 +66,7 @@ export const Home = () => {
           <Grid item xs={8}>
             <C.Wrapper>
               {
-                groups?.length > 0 ?
+                groups !== null && groups?.length > 0 ?
                   groups.map((group, index) => (
                     <Card key={index} sx={{ marginBottom: 3 }}>
                       <CardHeader
@@ -77,7 +76,7 @@ export const Home = () => {
                             aria-controls='basic-menu'
                             aria-haspopup={open ? 'true' : undefined}
                             onClick={handleClick}
-                            >
+                          >
                             <MoreVert />
                           </IconButton>
                         }
@@ -122,36 +121,36 @@ export const Home = () => {
           </Grid>
 
           <Grid item xs={4}>
-            <C.Wrapper>
+            
+              
+                <C.Participants
+                  in={expanded}
+                  timeout='auto'
+                  orientation='horizontal'
 
-              <C.Participants
-                in={expanded}
-                timeout='auto'
-                orientation='horizontal'
+                >
+                  <h1>Participantes</h1>
+                  {
+                    usersGroup?.length > 0 ?
+                      <List>
+                        {
+                          usersGroup.map((user, index) => (
+                            <ListItem key={index}>
+                              <ListItemAvatar>
+                                <Avatar>{user.name?.charAt(0)}</Avatar>
+                              </ListItemAvatar>
+                              <ListItemText primary={user.name} secondary={`@${user.username}`} />
 
-              >
-                <h1>Participantes</h1>
-                {
-                  usersGroup?.length > 0 ?
-                    <List>
-                      {
-                        usersGroup.map((user, index) => (
-                          <ListItem key={index}>
-                            <ListItemAvatar>
-                              <Avatar>{user.name?.charAt(0)}</Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary={user.name} secondary={`@${user.username}`} />
+                            </ListItem>
+                          ))
+                        }
+                      </List>
+                      : <h2>Sem participantes</h2>
+                  }
 
-                          </ListItem>
-                        ))
-                      }
-                    </List>
-                    : <h2>Sem participantes</h2>
-                }
-
-              </C.Participants>
-
-            </C.Wrapper>
+                </C.Participants>
+              
+            
           </Grid>
         </Grid>
       </C.Container>

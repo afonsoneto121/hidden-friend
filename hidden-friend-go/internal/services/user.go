@@ -64,3 +64,15 @@ func GetUserById(id string) (models.User, error) {
 
 	return user, err
 }
+
+func Login(user models.User) (models.User, error) {
+	client := config.New()
+	coll := client.Database("hidden-friend").Collection("users")
+	filter := bson.M{"username": user.Username, "password": user.Password}
+
+	opts := options.FindOne().SetProjection(bson.M{"password": 0})
+
+	err := coll.FindOne(context.TODO(), filter, opts).Decode(&user)
+
+	return user, err
+}

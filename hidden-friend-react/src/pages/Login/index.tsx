@@ -4,13 +4,13 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { addLogin } from '../../redux/login/loginSlice';
 import { User } from '../models/user';
-import { createUser, getUserById } from '../service/user';
+import { createUser, login } from '../service/user';
 import * as C from "./styles"
+import * as ServiceAuth from "../service/auth/auth"
 
 export const Login = () => {
   let [isLogin, setIsLogin] = useState(true);
   let [user, setUser] = useState<User>();
-  
   const navigate = useNavigate();
 
   const dispatch = useDispatch()
@@ -19,12 +19,16 @@ export const Login = () => {
     setIsLogin(!isLogin);
   }
   const handleLogin = async () => {
-    
-    const id = "6185e6bcf09c2dc61cd3a179";
-    const userResult: User = await getUserById(id);
-    console.log(userResult);
-    dispatch(addLogin(userResult));
-    navigate("/home");
+    const result= await login(user?.username, user?.password);
+    if(!result) {
+      alert("Login failed")
+    }
+    else {
+      ServiceAuth.login(result.token, result.user)
+      navigate("/home");
+    }
+    //dispatch(addLogin(userResult));
+
   }
 
   const handleOnClickSave = async () => {

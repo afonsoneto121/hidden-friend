@@ -12,15 +12,15 @@ export const OptionsList = () => {
   }
 
   const handleOnClickNotification = () => {
-    navigate('/home')
+    navigate('/notification')
   }
 
   const handleOnClickProfile = () => {
-    navigate('/home')
+    navigate('/profile')
   }
 
   const handleOnClickMyGroups = () => {
-    navigate('/home')
+    navigate('/group/mygroups')
   }
 
   const handleOnClickNewGroup = () => {
@@ -31,7 +31,7 @@ export const OptionsList = () => {
     <C.Container>
       <List>
         <ListItem>
-          <ListItemButton>
+          <ListItemButton onClick={handleOnClickHome} >
             <ListItemIcon>
               <Home /> {/* Icons */}
             </ListItemIcon>
@@ -40,7 +40,7 @@ export const OptionsList = () => {
         </ListItem>
 
         <ListItem>
-          <ListItemButton>
+          <ListItemButton onClick={handleOnClickNotification}>
             <ListItemIcon>
               <NotificationsNone /> {/* Icons */}
             </ListItemIcon>
@@ -49,7 +49,7 @@ export const OptionsList = () => {
         </ListItem>
 
         <ListItem>
-          <ListItemButton>
+          <ListItemButton onClick={handleOnClickProfile}>
             <ListItemIcon>
               <Person /> {/* Icons */}
             </ListItemIcon>
@@ -58,7 +58,7 @@ export const OptionsList = () => {
         </ListItem>
 
         <ListItem>
-          <ListItemButton>
+          <ListItemButton onClick={handleOnClickMyGroups}>
             <ListItemIcon>
               <ListAlt /> {/* Icons */}
             </ListItemIcon>

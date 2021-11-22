@@ -1,8 +1,8 @@
-import { Autocomplete, Avatar, Button, Card, CardContent, CardHeader, Checkbox, CircularProgress, FormControl, FormControlLabel, FormGroup, List, ListItem, ListItemAvatar, Step, StepLabel, Stepper, TextField, Typography } from '@material-ui/core';
+import { Autocomplete, Avatar, Button, Card, CardContent, Checkbox, CircularProgress, FormControlLabel, FormGroup, List, ListItem, ListItemAvatar, Step, StepLabel, Stepper, TextField, Typography } from '@material-ui/core';
 import { Box } from '@material-ui/system';
-import { CardActions, ListItemText } from '@mui/material';
+import { ListItemText } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import { useAppSelector } from '../../../app/hooks';
+import { useCurrentUser } from '../../../app/hook';
 import { Theme } from '../../../components/Theme'
 import { Group } from '../../models/group';
 import { User } from '../../models/user';
@@ -13,8 +13,9 @@ import * as C from "./styles"
 export const NewGroup = () => {
   const steps = ['Informações Básicas', 'Participantes', 'Confirmar'];
 
-  const userCurrent = useAppSelector(select => select.login.currente)
-  const [group, setGroup] = useState<Group>({ "admin": userCurrent })
+  const userCurrent = useCurrentUser()
+
+  const [group, setGroup] = useState<Group>({ admin: userCurrent })
 
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
