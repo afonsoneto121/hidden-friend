@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { NewGroup } from './pages/Group'
+import { DetailsGroup, NewGroup } from './pages/Group'
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { isAuthenticated } from './pages/service/auth/auth'
@@ -22,9 +22,13 @@ export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />}/>
-        <Route path="/home" element={<Home />}/>
-        <Route path="/group/new" element={<NewGroup />}/>
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+
+        <Route path="/group/" >
+          <Route path="new" element={<NewGroup />} />
+          <Route path="details/:id" element={<DetailsGroup />} />
+        </Route>
 
       </Routes>
     </BrowserRouter>
