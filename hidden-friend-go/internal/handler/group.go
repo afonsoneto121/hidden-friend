@@ -77,7 +77,7 @@ func GenerateMatches(c *gin.Context) {
 		return
 	}
 
-	c.IndentedJSON(http.StatusNoContent, gin.H{"message": "Group generated"})
+	c.IndentedJSON(http.StatusNoContent, gin.H{"message": "Group generated matches"})
 
 }
 

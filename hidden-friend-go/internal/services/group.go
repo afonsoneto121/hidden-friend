@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math/rand"
 
 	"afonso/hidden-friend/config"
 	"afonso/hidden-friend/internal/models"
@@ -82,7 +83,7 @@ func ToggleGroup(idGroup string, user models.User) error {
 func GetAllGroups() []models.Group {
 	client := config.New()
 	coll := client.Database("hidden-friend").Collection("group")
-	opts := options.Find().SetProjection(bson.M{"users.password": 0, "admin.password": 0})
+	opts := options.Find().SetProjection(bson.M{"users.password": 0, "admin.password": 0, "matches": 0})
 	cur, err := coll.Find(context.TODO(), bson.D{}, opts)
 
 	if err != nil {
@@ -106,7 +107,7 @@ func GetGroupByID(id string) (models.Group, error) {
 	objectId, _ := primitive.ObjectIDFromHex(id)
 	var group models.Group
 	filter := bson.D{{"_id", objectId}}
-	opts := options.FindOne().SetProjection(bson.M{"users.password": 0, "admin.password": 0})
+	opts := options.FindOne().SetProjection(bson.M{"users.password": 0, "admin.password": 0, "matches": 0})
 	err := coll.FindOne(context.TODO(), filter, opts).Decode(&group)
 
 	return group, err
@@ -134,8 +135,46 @@ func GenerateMatches(idGroup string, user models.User) error {
 	if user.ID != groupFound.Admin.ID {
 		return errors.New("Error: user invalid")
 	}
+	amountUsers := len(groupFound.Users)
+	if amountUsers%2 != 0 {
+		return errors.New("Error: Amount users should be pair")
+	}
+	pair := make(map[string]models.User)
 
-	//	update := bson.M{"$set": bson.M{"private": !groupFound.Private}}
-	//Loging for gener matches
+	var inSet []int
+	var random int
+	i := 0
+	for i < amountUsers {
+		random = rand.Intn(amountUsers)
+		if i == (amountUsers-1) && !isInSet(inSet, random) {
+			i = 0
+			fmt.Println("[CONFICT] = ", i, random)
+			continue
+		}
+		for random == i || isInSet(inSet, random) {
+			fmt.Println("[CONFICT**] = ", i, random)
+			random = rand.Intn(amountUsers - 1)
+		}
+		fmt.Println("[COMBINE] = ", i, random)
+		inSet = append(inSet, random)
+		pair[groupFound.Users[i].ID] = groupFound.Users[random]
+		i++
+	}
+	update := bson.M{"$set": bson.M{"matches": pair}}
+
+	res := coll.FindOneAndUpdate(context.TODO(), filter, update)
+	if res.Err() != nil {
+		return res.Err()
+	}
+
 	return nil
+}
+
+func isInSet(set []int, value int) bool {
+	for _, d := range set {
+		if d == value {
+			return true
+		}
+	}
+	return false
 }

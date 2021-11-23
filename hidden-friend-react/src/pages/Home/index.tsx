@@ -9,18 +9,22 @@ import { Menu, MenuItem, Avatar, Card, CardActions, CardHeader, Grid, IconButton
 import { Box } from "@material-ui/system";
 import { KeyboardArrowRight, MoreVert } from "@mui/icons-material";
 import { User } from "../models/user";
+import { useNavigate } from "react-router";
 
 export const Home = () => {
+  const navigate = useNavigate()
 
   const [groups, setGroups] = useState<Group[]>([])
   const [expanded, setExpanded] = useState(false)
   const [groupCurrent, setGroupCurrent] = useState<Group>()
   const [usersGroup, setUsersGroup] = useState<User[]>([])
+  let [currentID, setCurrentID] = useState('')
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+    setCurrentID(id)
     setAnchorEl(event.currentTarget);
   };
   const handleCloseMenu = () => {
@@ -75,7 +79,7 @@ export const Home = () => {
                             aria-label="settings"
                             aria-controls='basic-menu'
                             aria-haspopup={open ? 'true' : undefined}
-                            onClick={handleClick}
+                            onClick={(e)=> handleClick(e,group._id || "")}
                           >
                             <MoreVert />
                           </IconButton>
@@ -89,7 +93,7 @@ export const Home = () => {
                         onClose={handleCloseMenu}
                       >
                         <MenuItem>Entrar</MenuItem>
-                        <MenuItem>Detalhes</MenuItem>
+                        <MenuItem onClick={()=> navigate(`/group/details/${currentID}`)}>Detalhes</MenuItem>
                       </Menu>
                       <C.Content>
                         <p className="description">{group.description}</p>
